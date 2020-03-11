@@ -3,11 +3,11 @@
     - name: Add Jenkins repository's key
       become: 'yes'
       apt_key:
-        url: 'https://pkg.jenkins.io/debian/jenkins.io.key'
+        url: 'http://pkg.jenkins.io/debian/jenkins.io.key'
     - name: Add Jenkins repository
       become: 'yes'
       apt_repository:
-        repo: 'deb https://pkg.jenkins.io/debian-stable binary/'
+        repo: 'deb http://pkg.jenkins.io/debian-stable binary/'
     - name: Update apt
       become: 'yes'
       apt:
