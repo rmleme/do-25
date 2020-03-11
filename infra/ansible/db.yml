@@ -22,8 +22,8 @@
     - name: Configure MySQL network
       become: 'yes'
       copy:
-        src: ../db/mysqld.cnf
-        dest: /etc/mysql/conf.d/mysql.cnf
+        src: ../db/50-server.cnf
+        dest: /etc/mysql/mariadb.conf.d/50-server.cnf
         owner: root
         group: root
     - name: Restarts MySQL
