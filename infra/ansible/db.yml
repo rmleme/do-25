@@ -16,16 +16,14 @@
         dest: /home/vagrant/script.sql
     - name: 'Creates MySQL user, database and tables'
       become: 'yes'
-      shell: >-
-        mysql -u root < /home/vagrant/script.sql && echo "script rodado" >
-        ~/script-executado.sql
+      shell: mysql -u root < /home/vagrant/script.sql && echo "script rodado" > ~/script-executado.sql
       args:
         creates: ~/script-executado.sql
     - name: Configure MySQL network
       become: 'yes'
       copy:
         src: ../db/mysqld.cnf
-        dest: /etc/mysql/mysql.conf.d/mysqld.cnf
+        dest: /etc/mysql/conf.d/mysql.cnf
         owner: root
         group: root
     - name: Restarts MySQL

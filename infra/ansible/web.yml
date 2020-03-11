@@ -11,3 +11,8 @@
           - openjdk-8-jre
           - tomcat8
         state: present
+    - name: Copy web application to VM
+      become: 'yes'
+      copy:
+        src: ../../target/alura-forum.war
+        dest: /var/lib/tomcat8/webapps/alura-forum.war
