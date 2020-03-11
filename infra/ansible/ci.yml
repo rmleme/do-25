@@ -23,6 +23,10 @@
       become: 'yes'
       apt:
         name: jenkins
+    - name: Install git
+      become: 'yes'
+      apt:
+        name: git
     - name: Copy web SSH private key
       become: 'yes'
       copy:
