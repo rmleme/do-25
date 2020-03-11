@@ -1,0 +1,13 @@
+- hosts: all
+  tasks:
+    - name: Update apt
+      become: 'yes'
+      apt:
+        update_cache: 'yes'
+    - name: Install Java and Tomcat
+      become: 'yes'
+      apt:
+        name:
+          - openjdk-8-jre
+          - tomcat8
+        state: present

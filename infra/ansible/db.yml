@@ -1,0 +1,35 @@
+- hosts: all
+  tasks:
+    - name: Update apt
+      become: 'yes'
+      apt:
+        update_cache: 'yes'
+        cache_valid_time: 3600
+    - name: Install MySQL
+      become: 'yes'
+      apt:
+        name: mysql-server
+        state: present
+    - name: Copy MySQL initial script to VM
+      copy:
+        src: ../db/script.sql
+        dest: /home/vagrant/script.sql
+    - name: 'Creates MySQL user, database and tables'
+      become: 'yes'
+      shell: >-
+        mysql -u root < /home/vagrant/script.sql && echo "script rodado" >
+        ~/script-executado.sql
+      args:
+        creates: ~/script-executado.sql
+    - name: Configure MySQL network
+      become: 'yes'
+      copy:
+        src: ../db/mysqld.cnf
+        dest: /etc/mysql/mysql.conf.d/mysqld.cnf
+        owner: root
+        group: root
+    - name: Restarts MySQL
+      become: 'yes'
+      service:
+        name: mysql
+        state: restarted
