@@ -38,8 +38,9 @@ pipeline {
          }
       }
 
-      stage(deploy) {
+      stage(Deploy) {
          steps {
+            sh "ssh -o StrictHostKeyChecking=no -i /home/vagrant/devops vagrant@192.168.33.11 'sudo rm /home/vagrant/alura-forum.war'"
             sh "scp -o StrictHostKeyChecking=no -i /home/vagrant/devops target/alura-forum.war vagrant@192.168.33.11:/home/vagrant/alura-forum.war"
             sh "ssh -o StrictHostKeyChecking=no -i /home/vagrant/devops vagrant@192.168.33.11 'sudo mv /home/vagrant/alura-forum.war /var/lib/tomcat8/webapps/alura-forum.war'"
          }
