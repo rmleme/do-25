@@ -2,6 +2,14 @@ pipeline {
    agent any
 
    stages {
+      stage("Notificando início") {
+         steps {
+            script {
+                slackSend(color: "info", message: "Iniciando build ${BUILD_NUMBER} do job ${JOB_NAME}. Para acompanhar o build, clique em ${JOB_URL}", channel: "CVB6B7SJ2")
+            }
+         }
+      }
+
       stage("Limpando o workspace") {
          steps {
             sh "pwd"
@@ -27,22 +35,19 @@ pipeline {
          }
       }
 
-      stage("Solicitando aprovação") {
-         steps {
-            script {
-                slackSend(color: "warning", message: "Para aprovar este deploy, clique aqui: ${JOB_URL} - [Janela de 5 minutos]", channel: "CVB6B7SJ2")
-                timeout(time: 5, unit: "MINUTES") {
-                    input(id: "Deploy Decision", message: "Desejar aprovar o deploy?", ok: "Deploy")
-                }
-            }
-         }
-      }
-
       stage(Deploy) {
          steps {
             sh "ssh -o StrictHostKeyChecking=no -i /home/vagrant/devops vagrant@192.168.33.11 'sudo rm -f /var/lib/tomcat8/webapps/alura-forum.war'"
             sh "scp -o StrictHostKeyChecking=no -i /home/vagrant/devops target/alura-forum.war vagrant@192.168.33.11:/home/vagrant/alura-forum.war"
             sh "ssh -o StrictHostKeyChecking=no -i /home/vagrant/devops vagrant@192.168.33.11 'sudo mv /home/vagrant/alura-forum.war /var/lib/tomcat8/webapps/alura-forum.war'"
+         }
+      }
+
+      stage("Notificando término") {
+         steps {
+            script {
+                slackSend(color: "info", message: "Build ${BUILD_NUMBER} do job ${JOB_NAME} concluído com sucesso. Resultado disponível em ${JOB_URL}", channel: "CVB6B7SJ2")
+            }
          }
       }
    }
