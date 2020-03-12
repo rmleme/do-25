@@ -32,6 +32,6 @@
       copy:
         src: ../ssh-keys/devops
         dest: /home/vagrant/devops
-        mode: 400
+        mode: 0400
         owner: jenkins
         group: jenkins
