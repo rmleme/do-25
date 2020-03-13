@@ -17,6 +17,24 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  config.vm.define "web02" do |web|
+    web.vm.box = "debian/stretch64"
+    web.vm.hostname = "web02"
+    web.vm.network "private_network", ip: "192.168.33.12"
+    web.vm.provision "ansible" do |ansible|
+      ansible.playbook = "ansible/web.yml"
+    end
+  end
+
+  config.vm.define "lb" do |lb|
+    web.vm.box = "debian/stretch64"
+    web.vm.hostname = "nginx"
+    web.vm.network "private_network", ip: "192.168.33.20"
+    web.vm.provision "ansible" do |ansible|
+      ansible.playbook = "ansible/lb.yml"
+    end
+  end
+
   config.vm.define "ci" do |ci|
     ci.vm.box = "debian/stretch64"
     ci.vm.network "private_network", ip: "192.168.50.12"
